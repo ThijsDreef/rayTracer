@@ -19,10 +19,7 @@ public class Vec3
   }
   public static double dot(Vec3 one, Vec3 two)
   {
-    double dot = one.x * two.x + one.y * two.y + one.z * two.z;
-//    dot = (dot < 0) ? 0 : dot;
-//    System.out.println(dot);
-    return dot;
+    return  one.x * two.x + one.y * two.y + one.z * two.z;
   }
   public double length()
   {
@@ -35,6 +32,10 @@ public class Vec3
   public Vec3 times(Vec3 other) {return new Vec3(x * other.x, y * other.y, z * other.z);}
   public Vec3 times(double other) {return new Vec3(x * other, y * other, z * other);}
   public Vec3 plus(Vec3 other) {return new Vec3(x + other.x, y + other.y, z + other.z);}
+  public Vec3 divide(Vec3 other) {return new Vec3(x / other.x, y / other.y, z / other.z);}
+  public Vec3 divide(double other) {return new Vec3(x / other, y / other, z / other);}
+
+
   public int convertToColor()
   {
     return ((int)(1 * 255f + 0.5f) << 24 |

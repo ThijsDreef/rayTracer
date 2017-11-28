@@ -8,12 +8,18 @@ import App.util.Vec3;
  */
 public class Sphere extends Primitive
 {
-  public Vec3 pos;
   float radius;
   double xSpeed = 0.02;
   double ySpeed = 0.02;
-  public Sphere(Vec3 pos, float radius, Vec3 color)
+  double zSpeed = 0.02;
+  int width, height;
+  public Sphere(Vec3 pos, float radius, Vec3 color, int width, int height)
   {
+    this.width = width;
+    this.height = height;
+    xSpeed = Math.random() * 0.005;
+    ySpeed = Math.random() * 0.005;
+    zSpeed = Math.random() * 0.005;
     matColor = color;
     this.pos = pos;
     this.radius = radius;
@@ -22,35 +28,47 @@ public class Sphere extends Primitive
   @Override
   public double intersect(Ray ray)
   {
-      Vec3 o = ray.origin;
-      Vec3 d = ray.direction;
-      Vec3 oc = o.minus(pos);
-      double b = 2 * Vec3.dot(oc, d);
-      double c = Vec3.dot(oc, oc) - radius*radius;
-      double disc = b*b - 4 * c;
-      if (disc < 1e-4) return 0;
-      disc = Math.sqrt(disc);
-      double t0 = -b - disc;
-      double t1 = -b + disc;
-      double t = (t0 < t1) ? t0 : t1;
-      if (t < 0)
-        return 0;
-      return t;
-
+    Vec3 m = ray.origin.minus(pos);
+    double b = Vec3.dot(m, ray.direction);
+    double c = Vec3.dot(m, m) - radius * radius;
+    if (c > 0.0f && b > 0.0f) return 0;
+    double discr = b * b - c;
+    if (discr < 0.0) return 0;
+    double t = -b - Math.sqrt(discr);
+    if (t < 0.0) t = 0.0;
+    return t;
   }
 
-  public void bounce(int width, int height)
+  public void update()
   {
-    if (pos.x > width || pos.x < 0)
+    if (pos.x > width || pos.x < - width)
     {
+      xSpeed = Math.random() * 0.05;
+      if (pos.x < -width)
+        xSpeed = -xSpeed;
       xSpeed = -xSpeed;
     }
-    if (pos.y > height || pos.y < 0)
+    if (pos.y > height || pos.y < - height)
     {
+      ySpeed = Math.random() * 0.05;
+      if (pos.y < - height)
+        ySpeed = -ySpeed;
       ySpeed = -ySpeed;
+    }
+    if (pos.z > 18 || pos.z < 0)
+    {
+      zSpeed = Math.random() * 0.05;
+      if (pos.z > height)
+        zSpeed = -zSpeed;
     }
     pos.x += xSpeed;
     pos.y += ySpeed;
+    pos.z += zSpeed;
   }
 
+  @Override
+  public Vec3 getNormal(Vec3 hit)
+  {
+    return hit.minus(pos);
+  }
 }

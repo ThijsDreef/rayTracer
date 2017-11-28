@@ -19,6 +19,7 @@ public class Window extends JFrame
   public Window(String title, int width, int height)
   {
     super(title);
+
     this.width = width;
     this.height = height;
     image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -35,10 +36,11 @@ public class Window extends JFrame
     setLocationRelativeTo(null);
 
     setVisible(true);
-
+    setAlwaysOnTop(true);
     canvas.createBufferStrategy(1);
     bs = canvas.getBufferStrategy();
     g = bs.getDrawGraphics();
+
   }
   public void update()
   {
