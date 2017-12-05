@@ -2,6 +2,7 @@ package App.Fx;
 
 import App.Geometry.Primitive;
 import App.Ray.Ray;
+import App.util.Util;
 import App.util.Vec3;
 
 /**
@@ -9,8 +10,7 @@ import App.util.Vec3;
  */
 public class Light
 {
-  Vec3 pos;
-  public double shadowBias = 1;
+  private Vec3 pos;
   public Light()
   {
     this.pos = new Vec3(0, 0, 0);
@@ -28,11 +28,9 @@ public class Light
     {
       if (hitPrimitive == primitives[i])
         continue;
-      if (primitives[i].intersect(ray) > 0.1)
-      {
-        shadowBias -= 0.25;
-      }
+      if (primitives[i].intersect(ray) > 0)
+        shadowBias -= 0.2;
     }
-    return Vec3.dot(pos.minus(hit).normalize(), normal) * shadowBias;
+    return Util.clamp(Vec3.dot(pos.minus(hit).normalize(), normal.normalize()) * shadowBias, 0, 1);
   }
 }

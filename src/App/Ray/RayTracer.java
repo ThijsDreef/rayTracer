@@ -3,6 +3,7 @@ package App.Ray;
 import App.Fx.Light;
 import App.Geometry.Primitive;
 import App.Window;
+import App.util.Util;
 import App.util.Vec3;
 
 import java.awt.image.DataBufferInt;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 
 public class RayTracer
 {
-  private Vec3 eye = new Vec3(0.0f, 0.0f, -1.5);
+  private Vec3 eye = new Vec3(0.0f, 0.0f, -0.5);
   private float perspectiveCorrect;
   private int[] pixels;
   private boolean multiThread = false;
   private int amountOfThreads;
-  private final float maxRenderDistance = 30.0f;
+  private final float maxRenderDistance = 30;
   private int width, height;
   int done = 0;
   private RayTraceThread[] threads;
@@ -92,14 +93,6 @@ public class RayTracer
 
     }
   }
-  public double clamp(double clamp, double low, double high)
-  {
-    if (clamp > high)
-      clamp = high;
-    else if (clamp < low)
-      clamp = low;
-    return clamp;
-  }
   public void traceRay(int x, int y, Primitive[] primitives)
   {
     double depth = maxRenderDistance;
@@ -119,7 +112,7 @@ public class RayTracer
         Vec3 normal = primitives[i].getNormal(hit).normalize();
         for (int j = 0; j < lights.size(); j++)
           color += lights.get(j).getLight(hit, primitives[i], primitives, normal);
-        color = clamp(color, 0, 1);
+        color = Util.clamp(color, 0, 1);
         setPixels(x, y, primitives[i].matColor.times(color).convertToColor());
       }
     }

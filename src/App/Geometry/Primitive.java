@@ -16,7 +16,7 @@ public class Primitive implements Intersectable
   {
     return 0;
   }
-  public void update() {};
+  public void update() {}
   public Vec3 getNormal(Vec3 hit)
   {
     return normal;
